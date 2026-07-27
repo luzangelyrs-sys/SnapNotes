@@ -759,8 +759,7 @@ function copyCL(id){
   const text = cl.items.map((it,i)=>{
     const chk = cl.checked&&cl.checked[i];
     return (chk?'☑':'☐')+' '+it;
-  }).join('
-');
+  }).join('\n');
   navigator.clipboard.writeText(text).then(()=>{
     const el=document.getElementById('copySuccess');
     el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2000);
