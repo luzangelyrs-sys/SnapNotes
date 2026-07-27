@@ -822,10 +822,26 @@ document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click
 // ═══════════════════════════════════
 //  INIT
 // ═══════════════════════════════════
+function migrateOldData(){
+  // Recupera datos de la versión anterior si existen
+  try {
+    const oldData = localStorage.getItem('snapnotes_v2');
+    if(oldData && snippets.length === 0){
+      const parsed = JSON.parse(oldData);
+      if(parsed.snippets && parsed.snippets.length > 0){
+        snippets = parsed.snippets.map(s=>({...s, type:s.type||'text', items:s.items||[]}));
+        if(parsed.categories) categories = parsed.categories;
+        console.log('Migrados '+snippets.length+' snippets de versión anterior');
+      }
+    }
+  } catch(e){ console.warn('Migración fallida',e); }
+}
+
 async function init(){
   loadLocal();
   const ok = await loadCloud();
-  if(!ok) saveLocal(); // Si no hay nube, carga local
+  if(!ok) saveLocal();
+  migrateOldData();
   seedIfEmpty();
   save();
   render();
