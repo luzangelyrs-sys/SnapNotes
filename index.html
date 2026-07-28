@@ -746,7 +746,12 @@ function toggleCLItem(id,i,val){
   if(!cl.checked) cl.checked=new Array(cl.items.length).fill(false);
   cl.checked[i]=val; save(); renderCLGrid();
 }
-
+function deleteCL(id){
+  if(!confirm('¿Eliminar esta checklist?')) return;
+  clLists = clLists.filter(x=>x.id!==id);
+  save(); renderCLGrid();
+  showToast('🗑 Eliminada');
+}
 function copyView(){
   const s=snippets.find(x=>x.id===viewingId); if(!s) return;
   navigator.clipboard.writeText(s.content).then(()=>{
